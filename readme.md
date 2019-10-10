@@ -1,3 +1,3 @@
-# Insertion and Shell Sort
+# C++ Insertion Sort, Shell Sort and Binary Search
 
-Simple C++ Binary/Insertion and Shell Sorting Demo.
+Simple C++ Insertion Sort, Shell Sort and Binary Search Demo using pointers.
