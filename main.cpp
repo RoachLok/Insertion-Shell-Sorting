@@ -5,6 +5,41 @@ using namespace std;
 bool notDone = true;
 int i, a, nIterations, temp, gap, *aux, *aux2;
 
+class BinarySearch {
+    public:
+    int pos = 0, tempB, posAux;
+
+    bool searchTerm (int array[], int size, int term){
+        gap = size/2;
+        
+        if (*(array + gap) == term){
+            pos = pos + gap;
+            if (posAux < 0 && pos > 1) pos = pos -gap;
+            return true;    
+        }else if (size == 0)
+            return false;
+ 
+        if (*(array + gap) > term){              //Obvia la parte "derecha" del array.
+            posAux--;
+            if (posAux < 0){
+               pos = size - 1;
+            }
+            searchTerm(array, gap, term);
+        }else{                                   //Obvia la parte "izquierda" del array.
+            posAux++;
+            pos = pos + gap + 1;
+            searchTerm(array+gap+1, gap-1, term);
+        }
+        
+    }
+
+    int getPos() {
+        tempB = pos;
+        pos = 0;
+        return tempB;
+    }
+};
+
 void InsertionSort(int array[], int size) {
     cout << "Your list: ";
     for (i = 0; i < size; i++)
@@ -87,26 +122,49 @@ void ShellSort(int array[], int size) {
 }
 
 int main() {
-    bool redo = true;
-    int size, i, opt;
-    while (redo) {
-        cout << "Simple C++ Binary/Insertion and Shell Sorting Demo." << endl << endl;
-        cout << "Number of elements your list will contain: ", cin>>size;
-        cout << endl << "Introduce all elements now:" << endl;
+    int size, toSearch, opt;
+    BinarySearch bSearch;
 
-        int array[size];
-        for (i = 0; i < size; i++)
-            cin >> array[i];
+    cout << "Simple C++ Insertion, Shell and Binary Search Demo." << endl << endl;
+    cout << "Number of elements your list will contain: ", cin>>size;
+    cout << endl << "Introduce all elements now:" << endl;
 
-        cout << "Choose sorting method." << endl << "1) Binary/Insertion   2) Shell" << endl, cin>>opt, cout << endl << endl;
+    int array[size];
+    for (i = 0; i < size; i++)
+        cin >> array[i];
 
-        if (opt == 1)
-            InsertionSort(array, size);
-        else if (opt == 2)
-            ShellSort(array, size);
+    cout << "Choose sorting method:" << endl << "1) Insertion   2) Shell " << endl, cin>>opt, cout << endl << endl;
 
+    if (opt == 1)
+        InsertionSort(array, size);
+    else
+        ShellSort(array, size);  
 
-        cout << endl << endl << "Any to continue, 1 to exit.", cin>>opt, cout << endl;
-        if (opt == 1)redo = false;
+    cout << endl << endl << "Any to continue, 1 to exit. ", cin>>opt, cout << endl;  
+    
+    while (opt!=1) {
+        cout << "Choose sorting method:" << endl << "1) Insertion   2) Shell" << endl
+        << "Or search an item on last sorted array:"<< endl <<"3) Binary Search" << endl, cin>>opt, cout << endl;
+
+        if (opt == 3) {
+            cout << "Term you would like to look for: ", cin>>toSearch, cout << endl;
+            if (bSearch.searchTerm(array, size, toSearch))
+                cout<<toSearch<<" is stored on array's position: "<<bSearch.getPos();
+            else          
+                cout<<toSearch<<" is not stored in the array.";
+        } else {
+            cout << "Number of elements your list will contain: ", cin>>size;
+            cout << endl << "Introduce all elements now:" << endl;
+
+            int loopArray[size];
+            for (i = 0; i < size; i++)
+                cin >> loopArray[i];
+
+            if (opt == 1)
+                InsertionSort(loopArray, size);
+            else if (opt == 2)
+                ShellSort(loopArray, size);
+        }
+        cout << endl << endl << "Any to continue, 1 to exit. ", cin>>opt, cout << endl;
     }
 }
